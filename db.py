@@ -6,8 +6,10 @@ jumb = False
 
 total_nitro = 0
 bonus_nitro = 25
-nitro_movement = 100
+nitro_movement = 35
 nitro_lore_checker = False
+next_x = 0
+next_y = 0
 
 total_bullet = 0
 

@@ -81,6 +81,9 @@ while True:
         screen.blit(bullet_text, (20, 50))
 
         screen.blit(thunder_32, thunder_32_position)
+        db.next_x, db.next_y = thunder_32_position[0], thunder_32_position[1]
+        db.temp_x += 100
+        screen.blit(thunder_32, (db.next_x, db.next_y))
 
         if int(db.nitro_movement) >= 0 and not db.nitro_lore_checker:
             thunder_32_position.y -= 1
@@ -125,7 +128,7 @@ while True:
             db.total_nitro -= 1
 
         if thunder_32_position.colliderect(basic_player_position):
-            thunder_32_position.x += 100
+            thunder_32_position.y += 500
             db.total_nitro += db.bonus_nitro
 
         if basic_player_position.colliderect(enemy_level1_position):
@@ -138,7 +141,7 @@ while True:
             print(db.remainder1, db.remainder2)
 
         if enemy_level1_position.collidepoint(db.bullet_x, db.bullet_y):
-            enemy_level1_position.x += 100
+            enemy_level1_position.x += 500
 
 
     else:
