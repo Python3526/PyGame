@@ -3,6 +3,8 @@ import db
 
 pygame.init()
 
+mouse_position = 0
+
 screen = pygame.display.set_mode((800, 400))
 pygame.display.set_caption('Adventure')
 clock = pygame.time.Clock()
@@ -19,10 +21,12 @@ bullet_64 = pygame.image.load('pictures/bullet_64.png').convert_alpha()
 bullet_64_position = bullet_64.get_rect(midleft=(-5, 60))
 
 thunder_32 = pygame.image.load('pictures/thunder_32.png').convert_alpha()
-thunder_32_position = thunder_32.get_rect(midleft=(400, 368))
+thunder_32_position = thunder_32.get_rect(midleft=(200, 368))
 
 game_over = pygame.image.load('pictures/game_over.png').convert_alpha()
 game_over_position = game_over.get_rect(midleft=(350, 150))
+
+bullet_1 = pygame.image.load('pictures/bullet_1.png').convert_alpha()
 
 game_runner = True
 
@@ -33,19 +37,31 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and basic_player_position.y == 332:
                 db.jumb = True
+
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 exit()
-            if event.key == pygame.K_r:
+
+            if event.key == pygame.K_r and not game_runner:
                 game_runner = True
                 basic_player_position = basic_player.get_rect(midleft=(0, 368))
                 enemy_level1_position = enemy_level1.get_rect(midleft=(900, 380))
                 db.total_nitro = 0
                 db.total_bullet = 0
+
+        if pygame.mouse.get_pressed()[0]:
+            db.bullet_x = basic_player_position.x + 50
+            db.bullet_y = basic_player_position.y + 35
+            db.temp_x = pygame.mouse.get_pos()[0]
+            db.temp_y = pygame.mouse.get_pos()[1]
+            db.remainder1 = abs((db.temp_x - db.bullet_x) // db.bullet_1_movement)
+            db.remainder2 = abs((db.temp_y - db.bullet_y) // db.bullet_1_movement)
+            db.bullet_lore = True
 
     if game_runner:
         nitro_text = text_font.render(f"={int(db.total_nitro)}", True, (255, 0, 100))
@@ -115,8 +131,18 @@ while True:
         if basic_player_position.colliderect(enemy_level1_position):
             game_runner = False
 
+        if db.bullet_lore:
+            db.bullet_x += db.remainder1
+            db.bullet_y -= db.remainder2
+            screen.blit(bullet_1, (db.bullet_x, db.bullet_y))
+            print(db.remainder1, db.remainder2)
+
+        if enemy_level1_position.collidepoint(db.bullet_x, db.bullet_y):
+            enemy_level1_position.x += 100
+
+
     else:
-        # screen.fill((0, 0, 0))
+        screen.fill((250, 50, 50))
         screen.blit(game_over, game_over_position)
 
     pygame.display.update()

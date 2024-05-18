@@ -10,3 +10,14 @@ nitro_movement = 100
 nitro_lore_checker = False
 
 total_bullet = 0
+
+bullet_x = 0
+bullet_y = 0
+bullet_1_movement = 100
+calculating_target = 0
+bullet_lore = False
+
+remainder1 = 0
+remainder2 = 0
+temp_x = 0
+temp_y = 0
